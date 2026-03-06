@@ -3,29 +3,23 @@
 <head>
     <title>Gnesis Auto</title>
     <style>
-        body { font-family: Arial; text-align: center; padding: 40px; background: #f0f2f5; }
-        .container { background: white; padding: 30px; border-radius: 10px; max-width: 500px; margin: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #0078D4; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 20px auto; }
+        body { font-family: Arial; text-align: center; padding: 20px; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-width: 300px; }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #0078D4; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .solicitud { font-size: 24px; font-weight: bold; color: #0078D4; margin: 15px 0; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>🔁 Conectando con Gnesis</h2>
         <div class="loader"></div>
-        <div id="solicitudDisplay" class="solicitud"></div>
-        <p id="estado">Iniciando...</p>
+        <p>Conectando...</p>
     </div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const solicitud = urlParams.get('id');
         
-        document.getElementById('solicitudDisplay').textContent = solicitud ? `Solicitud: ${solicitud}` : 'Sin solicitud';
-        
         if (solicitud) {
-            document.getElementById('estado').textContent = 'Abriendo portal...';
             const portal = window.open('https://upa.gnesis.net/reporte/mostrar/SCBusSol', '_blank');
             
             setTimeout(() => {
@@ -34,7 +28,6 @@
                     if (campo) {
                         campo.value = solicitud;
                         campo.dispatchEvent(new Event('input', { bubbles: true }));
-                        campo.dispatchEvent(new Event('change', { bubbles: true }));
                         
                         const botones = portal.document.querySelectorAll('button');
                         for (let btn of botones) {
@@ -43,12 +36,14 @@
                                 break;
                             }
                         }
-                        document.getElementById('estado').textContent = '✅ Solicitud insertada';
+                        
+                        // CERRAR ESTA PESTAÑA DESPUÉS DE 2 SEGUNDOS
+                        setTimeout(() => window.close(), 2000);
                     }
                 } catch (e) {
-                    document.getElementById('estado').textContent = '⚠️ Error: ' + e.message;
+                    window.close();
                 }
-            }, 2000);
+            }, 1500);
         }
     </script>
 </body>
